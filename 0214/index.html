@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情人节快乐！我的宝贝</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            overflow: hidden;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        .container {
+            position: relative;
+            height: 100%;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff4081;
+            animation: float 6s infinite linear;
+            opacity: 0;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .message {
+            font-size: 1.5em;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        #photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px auto;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            background: url('https://tupian.li/images/2025/02/14/67af14ef1925f.jpg') center/cover; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div id="photo"></div>
+            <h1>❤️ 情人节快乐！夏紫祎女士 ❤️</h1>
+            <div class="message">
+                <p>在这个特别的日子里，我想告诉你：</p>
+                <p>你的笑容是我每天的动力，</p>
+                <p>你的温柔是我最温暖的港湾。</p>
+                <p>感谢你出现在我的生命里，</p>
+                <p>愿未来的每一天都有你相伴！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+
+        setInterval(createHeart, 300);
+
+        // 添加点击特效
+        document.addEventListener('click', function(e) {
+            const clickHeart = document.createElement('div');
+            clickHeart.innerHTML = '❤️';
+            clickHeart.style.position = 'absolute';
+            clickHeart.style.left = e.clientX + 'px';
+            clickHeart.style.top = e.clientY + 'px';
+            clickHeart.style.fontSize = '30px';
+            clickHeart.style.animation = 'pulse 0.5s';
+            document.body.appendChild(clickHeart);
+            
+            setTimeout(() => {
+                clickHeart.remove();
+            }, 500);
+        });
+
+        // 自动播放音乐（需要用户交互后生效）
+        const audio = new Audio('your-music.mp3'); // 替换为你的音乐文件
+        document.body.addEventListener('click', () => {
+            audio.play();
+        }, { once: true });
+    </script>
+</body>
+</html>
