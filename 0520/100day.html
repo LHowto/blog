@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的恋爱回忆</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffeef8 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1.5s ease;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .photo-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .photo-frame {
+            position: relative;
+            height: 280px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background: #fff;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .photo-frame:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .photo-frame:hover .photo {
+            transform: scale(1.1);
+        }
+        
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .photo-frame:hover .photo-info {
+            transform: translateY(0);
+        }
+        
+        .photo-date {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #ffb6d5;
+        }
+        
+        .photo-desc {
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        
+        .special {
+            grid-column: span 2;
+            height: 350px;
+        }
+        
+        .special .photo-info {
+            padding: 30px;
+        }
+        
+        .heart-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .heart-photo {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            clip-path: url(#heart-path);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .photo-frame {
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            font-size: 1.1rem;
+            color: #ff6b9d;
+            animation: fadeIn 2s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .photo-wall {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .special {
+                grid-column: span 1;
+                height: 280px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+    <svg width="0" height="0">
+        <defs>
+            <clipPath id="heart-path" clipPathUnits="objectBoundingBox">
+                <path d="M0.5,0.3 C0.6,0.15 0.7,0.3 0.8,0.3 0.9,0.3 1.0,0.3 1.1,0.3 1.2,0.3 1.3,0.15 1.4,0.3 L1.4,0.5 C1.3,0.65 1.2,0.5 1.1,0.5 1.0,0.5 0.9,0.5 0.8,0.5 0.7,0.5 0.6,0.5 0.5,0.5 C0.4,0.65 0.3,0.5 0.2,0.5 0.1,0.5 0.0,0.5 -0.1,0.5 -0.2,0.5 -0.3,0.65 -0.4,0.5 Z" 
+                      transform="scale(0.7) translate(-0.3 -0.2)"/>
+            </clipPath>
+        </defs>
+    </svg>
+
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="header">
+        <h1>我们的恋爱回忆</h1>
+        <p>每一张照片都是我们爱情故事的珍贵一页，记录着从相识到相知的点点滴滴</p>
+    </div>
+    
+    <div class="photo-wall" id="photoWall">
+        <!-- 照片将通过JavaScript动态生成 -->
+    </div>
+    
+    <div class="footer">
+        <p>每一天都因为有你而变得不同 · 爱你的每一天都是520</p>
+    </div>
+    
+    <script>
+        // 照片数据JSON
+        const photosData = {
+            "title": "我们的恋爱回忆",
+            "subtitle": "每一张照片都是我们爱情故事的珍贵一页，记录着从相识到相知的点点滴滴",
+            "footer": "每一天都因为有你而变得不同 · 爱你的每一天都是520",
+            "photos": [
+                {
+                    "id": 1,
+                    "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E5%8D%97%E6%B9%96.jpg",
+                    "alt": "我们的第一张合照",
+                    "date": "2025.02.15",
+                    "desc": "这是我们的第一张合照",
+                    "special": true,
+                    "heartShape": false
+                },
+                {
+                    "id": 2,
+                    "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E9%85%92%E5%BA%97%E8%87%AA%E6%8B%8D.jpg",
+                    "alt": "一起旅行",
+                    "date": "2025.02.15",
+                    "desc": "第一次一起旅行，在酒店的自拍，你说那天画了美美的妆",
+                    "special": false,
+                    "heartShape": false
+                },
+                {
+                    "id": 3,
+                    "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%80%81%E8%8A%B1.jpg",
+                    "alt": "第一次送的花",
+                    "date": "2025.02.09",
+                    "desc": "第一次送的花",
+                    "special": false,
+                    "heartShape": false
+                },
+                {
+                    "id": 4,
+                    "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E7%BE%8E%E7%BE%8E%E8%87%AA%E6%8B%8D.jpg",
+                    "alt": "美美自拍",
+                    "date": "2025.05.03",
+                    "desc": "美美自拍",
+                    "special": false,
+                    "heartShape": false
+                },
+                {
+                    "id": 5,
+                    "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E5%90%83%E9%A5%AD%E6%97%A5%E5%B8%B8.jpg",
+                    "alt": "日常",
+                    "date": "2025.04.12",
+                    "desc": "简单的日常，因为有你而变得特别",
+                    "special": false,
+                    "heartShape": false
+                },
+                {
+                    "id": 6,
+                    "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E6%8B%8D%E7%AB%8B%E5%BE%97-%E6%B5%B7%E6%A3%A0.jpg",
+                    "alt": "这张拍立得照的真好啊",
+                    "date": "2025.04.05",
+                    "desc": "这张拍立得照的真好啊",
+                    "special": false,
+                    "heartShape": false
+                },
+                {
+                    "id": 7,
+                    "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E6%B0%B4%E4%B8%8A%E5%85%AC%E5%9B%AD.jpg",
+                    "alt": "水上公园夕阳",
+                    "date": "2025.04.27",
+                    "desc": "水上公园夕阳",
+                    "special": false,
+                    "heartShape": false
+                },
+                {
+      "id": 1,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003486.jpg",
+      "alt": "我们的照片1",
+      "date": "2023.11.05",
+      "desc": "这是我们第1张合照，记录了美好的时刻",
+      "special": true,
+      "heartShape": false
+    },
+    {
+      "id": 2,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/mmexport1746636158732.jpg",
+      "alt": "我们的照片2",
+      "date": "2023.12.07",
+      "desc": "这是我们第2张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 3,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003665.jpg",
+      "alt": "我们的照片3",
+      "date": "2023.12.23",
+      "desc": "这是我们第3张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 4,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002020.jpg",
+      "alt": "我们的照片4",
+      "date": "2023.01.17",
+      "desc": "这是我们第4张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 5,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/mmexport1746636169830.jpg",
+      "alt": "我们的照片5",
+      "date": "2023.05.04",
+      "desc": "这是我们第5张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 6,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/mmexport1746636163238.jpg",
+      "alt": "我们的照片6",
+      "date": "2023.05.27",
+      "desc": "这是我们第6张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 7,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005169.jpg",
+      "alt": "我们的照片7",
+      "date": "2023.01.27",
+      "desc": "这是我们第7张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 8,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/mmexport1746636154257.jpg",
+      "alt": "我们的照片8",
+      "date": "2023.05.08",
+      "desc": "这是我们第8张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 9,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/mmexport1747588223493.jpg",
+      "alt": "我们的照片9",
+      "date": "2023.08.17",
+      "desc": "这是我们第9张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 10,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/wx_camera_1742041667846.jpg",
+      "alt": "我们的照片10",
+      "date": "2023.04.26",
+      "desc": "这是我们第10张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 11,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002980.jpg",
+      "alt": "我们的照片11",
+      "date": "2023.02.07",
+      "desc": "这是我们第11张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 12,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003361.jpg",
+      "alt": "我们的照片12",
+      "date": "2023.04.06",
+      "desc": "这是我们第12张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 13,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004903.jpg",
+      "alt": "我们的照片13",
+      "date": "2023.10.08",
+      "desc": "这是我们第13张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 14,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004193.jpg",
+      "alt": "我们的照片14",
+      "date": "2023.05.22",
+      "desc": "这是我们第14张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 15,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004450.jpg",
+      "alt": "我们的照片15",
+      "date": "2023.08.17",
+      "desc": "这是我们第15张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 16,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002375.jpg",
+      "alt": "我们的照片16",
+      "date": "2023.05.24",
+      "desc": "这是我们第16张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 17,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002862.jpg",
+      "alt": "我们的照片17",
+      "date": "2023.12.27",
+      "desc": "这是我们第17张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 18,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005699.jpg",
+      "alt": "我们的照片18",
+      "date": "2023.08.03",
+      "desc": "这是我们第18张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 19,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005772.jpg",
+      "alt": "我们的照片19",
+      "date": "2023.04.03",
+      "desc": "这是我们第19张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 20,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003093.jpg",
+      "alt": "我们的照片20",
+      "date": "2023.05.09",
+      "desc": "这是我们第20张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 21,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004272.jpg",
+      "alt": "我们的照片21",
+      "date": "2023.08.24",
+      "desc": "这是我们第21张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 22,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002285.jpg",
+      "alt": "我们的照片22",
+      "date": "2023.05.25",
+      "desc": "这是我们第22张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 23,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005619.jpg",
+      "alt": "我们的照片23",
+      "date": "2023.08.24",
+      "desc": "这是我们第23张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": true
+    },
+    {
+      "id": 24,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005532.jpg",
+      "alt": "我们的照片24",
+      "date": "2023.02.23",
+      "desc": "这是我们第24张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 25,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004341.jpg",
+      "alt": "我们的照片25",
+      "date": "2023.04.12",
+      "desc": "这是我们第25张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 26,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004987.jpg",
+      "alt": "我们的照片26",
+      "date": "2023.03.06",
+      "desc": "这是我们第26张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 27,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002485.jpg",
+      "alt": "我们的照片27",
+      "date": "2023.01.03",
+      "desc": "这是我们第27张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 28,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002609.jpg",
+      "alt": "我们的照片28",
+      "date": "2023.07.09",
+      "desc": "这是我们第28张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 29,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005326.jpg",
+      "alt": "我们的照片29",
+      "date": "2023.11.07",
+      "desc": "这是我们第29张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 30,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005399.jpg",
+      "alt": "我们的照片30",
+      "date": "2023.02.16",
+      "desc": "这是我们第30张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 31,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005858.jpg",
+      "alt": "我们的照片31",
+      "date": "2023.05.16",
+      "desc": "这是我们第31张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 32,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003852.jpg",
+      "alt": "我们的照片32",
+      "date": "2023.10.09",
+      "desc": "这是我们第32张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 33,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004105.jpg",
+      "alt": "我们的照片33",
+      "date": "2023.04.27",
+      "desc": "这是我们第33张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 34,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735002723.jpg",
+      "alt": "我们的照片34",
+      "date": "2023.02.18",
+      "desc": "这是我们第34张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 35,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003154.jpg",
+      "alt": "我们的照片35",
+      "date": "2023.11.26",
+      "desc": "这是我们第35张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 36,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003240.jpg",
+      "alt": "我们的照片36",
+      "date": "2023.09.22",
+      "desc": "这是我们第36张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 37,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735005066.jpg",
+      "alt": "我们的照片37",
+      "date": "2023.01.11",
+      "desc": "这是我们第37张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 38,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735003951.jpg",
+      "alt": "我们的照片38",
+      "date": "2023.04.09",
+      "desc": "这是我们第38张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 39,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004523.jpg",
+      "alt": "我们的照片39",
+      "date": "2023.03.14",
+      "desc": "这是我们第39张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 40,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/1747735004715.jpg",
+      "alt": "我们的照片40",
+      "date": "2023.03.02",
+      "desc": "这是我们第40张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 41,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/mmexport1746636149743.jpg",
+      "alt": "我们的照片41",
+      "date": "2023.03.27",
+      "desc": "这是我们第41张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 43,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E7%BE%8E%E7%BE%8E%E8%87%AA%E6%8B%8D3.jpg",
+      "alt": "我们的照片43",
+      "date": "2023.01.27",
+      "desc": "这是我们第43张合照，记录了美好的时刻",
+      "special": false,
+      "heartShape": false
+    },
+    {
+      "id": 44,
+      "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/%E7%BE%8E%E7%BE%8E%E8%87%AA%E6%8B%8D2.jpg",
+      "alt": "我们的照片44",
+      "date": "2023.03.24",
+      "desc": "这是我们第44张合照，记录了美好的时刻",
+      "special": true,
+      "heartShape": false
+    },
+    {
+        "id": 45,
+        "src": "https://picgo131072.oss-cn-beijing.aliyuncs.com/20250520174235414.png",
+        "alt": "最新合照",
+        "date": "2025.05.20",
+        "desc": "520快乐！100天快乐！期待未来和你创造更多的美好回忆！",
+        "special": true,
+        "heartShape": false
+    }
+    ]
+};
+
+        // 动态生成照片墙
+        function renderPhotoWall() {
+            const photoWall = document.getElementById('photoWall');
+            
+            // 更新标题和页脚
+            document.querySelector('.header h1').textContent = photosData.title;
+            document.querySelector('.header p').textContent = photosData.subtitle;
+            document.querySelector('.footer p').textContent = photosData.footer;
+            
+            // 清空现有内容
+            photoWall.innerHTML = '';
+            
+            // 为每张照片创建HTML
+            photosData.photos.forEach((photo, index) => {
+                const photoFrame = document.createElement('div');
+                photoFrame.className = `photo-frame ${photo.special ? 'special' : ''}`;
+                photoFrame.style.animationDelay = `${0.2 + index * 0.2}s`;
+                
+                if (photo.heartShape) {
+                    photoFrame.innerHTML = `
+                        <div class="heart-container">
+                            <img src="${photo.src}" alt="${photo.alt}" class="photo heart-photo">
+                            <div class="photo-info">
+                                <div class="photo-date">${photo.date}</div>
+                                <div class="photo-desc">${photo.desc}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    photoFrame.innerHTML = `
+                        <img src="${photo.src}" alt="${photo.alt}" class="photo">
+                        <div class="photo-info">
+                            <div class="photo-date">${photo.date}</div>
+                            <div class="photo-desc">${photo.desc}</div>
+                        </div>
+                    `;
+                }
+                
+                photoWall.appendChild(photoFrame);
+            });
+        }
+        
+        // 创建漂浮的心形背景
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const colors = ['#ff6b9d', '#ffb6d5', '#ffd1e6', '#ff9ec6'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                
+                // 随机属性
+                const size = Math.random() * 30 + 10;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 3 + 3;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                heart.style.left = `${posX}%`;
+                heart.style.top = `${posY}%`;
+                heart.style.fontSize = `${size}px`;
+                heart.style.color = color;
+                heart.style.animationDelay = `${delay}s`;
+                heart.style.animationDuration = `${duration}s`;
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // 页面加载后执行
+        window.addEventListener('load', () => {
+            createHearts();
+            renderPhotoWall();
+        });
+    </script>
+</body>
+</html>
